@@ -24,12 +24,6 @@ public class Departamento {
 		this.investigadores = investigadores;
 	}
 
-	public Departamento(int depID, String descripcion, int numeroInvestigadores) {
-		super();
-		this.depID = depID;
-		this.descripcion = descripcion;
-		this.numeroInvestigadores = numeroInvestigadores;
-	}
 
 	public int getDepID() {
 		return depID;

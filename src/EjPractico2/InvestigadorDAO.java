@@ -1,91 +1,45 @@
 package EjPractico2;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 public class InvestigadorDAO {
-    Connection conexion;
-    
-    // crear un investigador
-	 public void create(Investigador investigador, Departamento departamento) {
-         //si investigador es null crea una clase
-	        if (investigador != null) {
-                //se inserta en la base de datos un nuevo investigador
-	            String sql = "INSERT INTO investigador (invID, nombre, apellidos, telefono, correo, departamento) "
-	            		+ " VALUES ( ?,    ?,     ?,     ?,     ?,    ?  )";
+     private Conexion conexion;
 
-                //el try hace una prueba de conexion
-	            try {
-                    //establecemos la conexion como "conexion"
-	            	conexion = Conexion.getConnection();
-	            	
-                    //las distintas sentencias de todas las columnas referentes al investigador
-	                PreparedStatement sentencia = conexion.prepareStatement(sql);
-	                sentencia.setInt(1, investigador.getInvID());
-	                sentencia.setString(2, investigador.getNombre());
-	                sentencia.setString(3, (investigador.getApellidos()));
-	                sentencia.setString(4, investigador.getTelefono());
-	                sentencia.setString(5, investigador.getCorreo());
-                    sentencia.setInt(6, departamento.getDepID());
+    public List<Investigador> buscar(int id) {
+        List<Investigador> investigadores = new LinkedList<>();
+        String sql = "SELECT * FROM investigador WHERE Inv_ID = ?";
 
-                    
+        try (Connection con = conexion.getConnection(); 
+               PreparedStatement stmt = con.prepareStatement(sql)) {
+               stmt.setInt(1, id);
+               ResultSet rs = stmt.executeQuery();
 
-	                sentencia.executeUpdate();
-	                conexion.close();
-	            } catch (SQLException ex) {
-	                System.out.println("Error al insertar.");
-	            }
-	        }
-	    }
-        List<Investigador> investigadoresXid(int ID){
-            
-            List<Investigador> investigadores = new LinkedList<>();
-            investigadores = null;
-
-            List<Departamento> departamentos =new LinkedList<>();
-            departamento=null;
-
-            String sql = "SELECT *"+
-            "FROM investigador, departamento" +
-            "WHERE departamento.dept_ID = investigador.Dept_ID & invID = ?";
-            String sqlDep = "SELECT *"+
-            "FROM departamento"+
-            "where departamento.dept_ID = investigador.Dept_ID";
-
-            
-
-            try {
-            PreparedStatement sentencia = conexion.prepareStatement(sql);
-            PreparedStatement sentenciaDep = conexion.prepareStatement(sqlDep);
-
-            
-
-            ResultSet rs = sentencia.executeQuery();
-
-            if (rs.next()) { 
-                String nombre = rs.getString("nombre");
-                String apellidos = rs.getString("apellidos");
-                String telefono = rs.getString("telefono");
-                String correo = rs.getString("correo");
+            while (rs.next()) {
+                int idInv = rs.getInt("Inv_ID");
+                String nombre = rs.getString("Nombre");
+                String apellidos = rs.getString("Apellidos");
+                String telefono = rs.getString("Telefono");
+                String correo = rs.getString("Correo");
                 
-               
-                // rellenar con las partes del departamento
-                departamentos = new Departamento();
-                investigador = new Investigador(InvID, nombre, apellidos, telefono, correo, );
+                   // Asumiendo que tienes un método para buscar el departamento por su ID
+                DepartamentoDAO departamentoDAO = new DepartamentoDAO();
+                Departamento departamento = departamentoDAO.buscar(id);
+                
+
+                Investigador investigador = new Investigador(idInv, nombre, apellidos, telefono, correo, null);
                 investigadores.add(investigador);
-
             }
-        } catch (SQLException ex) {
-            System.out.println("Error al consultar un investigador.");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error al consultar los investigadores.");
         }
 
-            return investigador;
-        }
+        return investigadores;
+    }
 }
