@@ -7,11 +7,17 @@ public class Main {
 		DepartamentoDAO depDAO = new DepartamentoDAO();
 		
 		// Obtener departamentos por ID
-		Departamento departamento = depDAO.buscar(1);
+		Departamento departamento = depDAO.buscar(3);
 		System.out.println("Departamento encontrado: " + departamento);
 		
+		// Insertar un nuevo departamento
+		Departamento nuevoDepartamento = new Departamento(4, "Matemáticas", 5, null);
+		depDAO.insertar(nuevoDepartamento);
+		System.out.println("Nuevo departamento insertado: " + nuevoDepartamento);
 		
+		//eliminar un departamento 
 		
+		depDAO.eliminar(4);
 		
 	}
 }
