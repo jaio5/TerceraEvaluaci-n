@@ -3,7 +3,7 @@ package EjPractico2;
 import java.util.Date;
 import java.util.List;
 
-public class Doctor {
+public class Doctor extends Investigador {
 	
 	private Date anyoTesis;
 	private String tituloTesis;
@@ -12,9 +12,10 @@ public class Doctor {
 	private List<Articulo> articulos;
 	private List<Curso> cursos;
 	
-	public Doctor(Date anyoTesis, String tituloTesis, String calificacionTesis, SeImparteEn seImparte,
+	public Doctor(int invID, String nombre, String apellidos, String telefono, String correo, Departamento departamento,
+			Date anyoTesis, String tituloTesis, String calificacionTesis, SeImparteEn seImparte,
 			List<Articulo> articulos, List<Curso> cursos) {
-		super();
+		super(invID, nombre, apellidos, telefono, correo, departamento);
 		this.anyoTesis = anyoTesis;
 		this.tituloTesis = tituloTesis;
 		this.calificacionTesis = calificacionTesis;
@@ -22,6 +23,7 @@ public class Doctor {
 		this.articulos = articulos;
 		this.cursos = cursos;
 	}
+
 
 	public Date getAnyoTesis() {
 		return anyoTesis;

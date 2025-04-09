@@ -11,5 +11,9 @@ import java.util.List;
 public class DoctorandoDAO {
 	
    private Connection conexion;
+   
+   public void buscar(int id) {
+	   erro
+   }
     
 }

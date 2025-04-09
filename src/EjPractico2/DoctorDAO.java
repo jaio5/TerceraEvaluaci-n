@@ -2,39 +2,46 @@ package EjPractico2;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Date;
 
 public class DoctorDAO {
 
-   Connection conexion;
+   Conexion conexion;
     
-	 public void create(Articulo articulo) {
-	        if (articulo != null) {
-	            String sql = "INSERT INTO Doctor (anyoTesis, tituloTesis, calificacionTesis, seImparte, curso) "
-	                    + "             VALUES ( ?,    ?,     ?,     ?,     ?  )";
+	public void buscar(int id) {
+		//SQL para buscar un doctor
+		String sql = "SELECT*FROM doctor WHERE Inv_ID = ?";
+		try (Connection con= conexion.getConnection();
+				PreparedStatement stmt = con.prepareStatement(sql)) {
+			stmt.setInt(1, id);
+			ResultSet rs = stmt.executeQuery();
 
-	            try {
-	            	conexion = Conexion.getConnection();
-	            	
-	                PreparedStatement sentencia = conexion.prepareStatement(sql);
-	                sentencia.setInt(1, articulo.getId());
-	                sentencia.setString(2, articulo.getNombre());
-	                sentencia.setDate(3, new java.sql.Date(articulo.getfNacimiento().getTime()));
-	                sentencia.setDouble(4, articulo.getNotaMedia());
-	                sentencia.setString(5, articulo.getCurso());
+			while (rs.next()) {
+				int idInv = rs.getInt("Inv_ID");
+				Date anoTesis = rs.getDate("Ano_Tesis");
+				String tituloTesis = rs.getString("Titulo_Tesis");
+				String calificacion = rs.getString("Calificacion_Tesis");
+				
+				InvestigadorDAO investigadorDAO = new InvestigadorDAO();
+				Investigador investigador = investigadorDAO.buscar(idInv);
+				
+				DepartamentoDAO departamentoDAO = new DepartamentoDAO();
+				Departamento departamento = departamentoDAO.buscar(id);
+				
+				SeImparteEn seImparte = 
+				// Crear un objeto Doctor con los datos obtenidos
+				Doctor doctor = new Doctor(idInv, investigador.getNombre(),investigador.getApellidos(), investigador.getTelefono(), investigador.getCorreo(),
+						departamento, anoTesis, calificacion, calificacion, null, null,null);
+				
+			}
 
-	                sentencia.executeUpdate();
-	                conexion.close();
-	            } catch (SQLException ex) {
-	                System.out.println("Error al insertar.");
-	            }
-	        }
-	    }
-   
-    
-    List<Doctor> 
-    
-}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Error al consultar los doctores.");
+		}
+	}
     
 }

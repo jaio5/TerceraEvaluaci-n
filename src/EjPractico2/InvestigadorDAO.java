@@ -30,7 +30,7 @@ public class InvestigadorDAO {
                 String apellidos = rs.getString("Apellidos");
                 String telefono = rs.getString("Telefono");
                 String correo = rs.getString("Correo");
-                
+               
                 // Asumiendo que tienes un método para buscar el departamento por su ID
                
                 Investigador investigador = new Investigador(idInv, nombre, apellidos, telefono, correo, null);
