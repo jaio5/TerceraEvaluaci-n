@@ -1,5 +1,5 @@
 package EjPractico2;
-
+//rehacer insertar
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,9 +17,14 @@ public class CursoDAO {
             stmt.setInt(1, curso.getCursoID());
             stmt.setString(2, curso.getDescripcion());
             stmt.setInt(3, curso.getNumHoras());
-            stmt.setInt(4, curso.getSeImparteEn().getHora().getHours()); // Example for related data
+            
+            SeImparteEn seImparteEn = curso.getSeImparteEn();
+            List<Doctorando> doctorando = curso.getDoctorando();
+            List<Doctor> doctor = curso.getDoctor();
+            
             stmt.executeUpdate();
             System.out.println("Curso inserted successfully.");
+            
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error inserting Curso.");
