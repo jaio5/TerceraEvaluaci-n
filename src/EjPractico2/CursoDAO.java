@@ -11,25 +11,21 @@ public class CursoDAO {
 
     // Create
     public void insertar(Curso curso) {
-        String sql = "INSERT INTO curso (Curso_ID, Descripcion, Num_Horas, Inv_ID) VALUES (?, ?, ?, ?)";
-        try (Connection con = conexion.getConnection();
+        String sql = "INSERT INTO curso (Curso_ID, Descripcion, Num_Horas) VALUES (?, ?, ?)";
+        try (Connection con = Conexion.getConnection(); // Static method call
              PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setInt(1, curso.getCursoID());
             stmt.setString(2, curso.getDescripcion());
             stmt.setInt(3, curso.getNumHoras());
-            
-            SeImparteEn seImparteEn = curso.getSeImparteEn();
-            List<Doctorando> doctorando = curso.getDoctorando();
-            List<Doctor> doctor = curso.getDoctor();
-            
+
             stmt.executeUpdate();
             System.out.println("Curso inserted successfully.");
-            
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error inserting Curso.");
         }
     }
+
 
     // Read
     public List<Curso> buscar(int id) {
